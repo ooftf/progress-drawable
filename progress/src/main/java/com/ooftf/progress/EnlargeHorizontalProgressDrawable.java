@@ -11,8 +11,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -70,6 +68,10 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
         invalidateSelf();
     }
 
+    public void setDuration(long durationMillis) {
+        mAnimation.setDuration(durationMillis);
+    }
+
     @Override
     public void start() {
         this.mAnimation.reset();
@@ -104,7 +106,7 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
     }
 
     @Override
-    public void setBounds(@NonNull Rect bounds) {
+    public void setBounds(Rect bounds) {
         super.setBounds(bounds);
     }
 
@@ -117,7 +119,7 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
     }
 
     @Override
-    public void draw(@NonNull Canvas canvas) {
+    public void draw(Canvas canvas) {
         mLine.draw(canvas, this.getBounds());
     }
 
@@ -128,7 +130,7 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
     }
 
     @Override
-    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+    public void setColorFilter(ColorFilter colorFilter) {
         mLine.mPaint.setColorFilter(colorFilter);
         invalidateSelf();
     }

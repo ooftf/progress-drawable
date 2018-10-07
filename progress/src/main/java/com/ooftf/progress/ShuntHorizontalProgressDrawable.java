@@ -11,8 +11,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -26,7 +24,7 @@ import android.view.animation.Transformation;
  */
 
 public class ShuntHorizontalProgressDrawable extends Drawable implements Animatable {
-    private static final int DURATION_MILLIS = 500;
+    private static final int DURATION_MILLIS = 600;
     private Line mLine;
     private Context mContext;
     private Animation mAnimation;
@@ -70,7 +68,9 @@ public class ShuntHorizontalProgressDrawable extends Drawable implements Animata
         mLine.colors = colors;
         invalidateSelf();
     }
-
+    public void setDuration(long durationMillis){
+        mAnimation.setDuration(durationMillis);
+    }
     @Override
     public void stop() {
         this.mParent.clearAnimation();
@@ -106,7 +106,7 @@ public class ShuntHorizontalProgressDrawable extends Drawable implements Animata
     }
 
     @Override
-    public void draw(@NonNull Canvas canvas) {
+    public void draw(Canvas canvas) {
         mLine.draw(canvas, this.getBounds());
     }
 
@@ -117,7 +117,7 @@ public class ShuntHorizontalProgressDrawable extends Drawable implements Animata
     }
 
     @Override
-    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+    public void setColorFilter(ColorFilter colorFilter) {
         mLine.mPaint.setColorFilter(colorFilter);
         invalidateSelf();
     }

@@ -11,8 +11,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -25,7 +23,7 @@ import android.view.animation.Transformation;
  */
 
 public class FlowHorizontalProgressDrawable extends Drawable implements Animatable {
-    public static final int DURATION_MILLIS = 500;
+    public static final int DURATION_MILLIS = 600;
     Line mLine;
     Context mContext;
     private Animation mAnimation;
@@ -59,7 +57,9 @@ public class FlowHorizontalProgressDrawable extends Drawable implements Animatab
         animation.setInterpolator(new LinearInterpolator());
         mAnimation = animation;
     }
-
+    public void setDuration(long durationMillis){
+        mAnimation.setDuration(durationMillis);
+    }
     @Override
     public void start() {
         this.mAnimation.reset();
@@ -102,7 +102,7 @@ public class FlowHorizontalProgressDrawable extends Drawable implements Animatab
     }
 
     @Override
-    public void draw(@NonNull Canvas canvas) {
+    public void draw(Canvas canvas) {
         mLine.draw(canvas, this.getBounds());
     }
 
@@ -113,7 +113,7 @@ public class FlowHorizontalProgressDrawable extends Drawable implements Animatab
     }
 
     @Override
-    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+    public void setColorFilter(ColorFilter colorFilter) {
         mLine.mPaint.setColorFilter(colorFilter);
         invalidateSelf();
     }
