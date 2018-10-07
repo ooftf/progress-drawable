@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -17,19 +18,20 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 
 /**
+ * 渐变色进度条
  * @author ooftf
  * @email 994749769@qq.com
  * @date 2018/9/29 0029
  */
 
-public class EnlargeHorizontalProgressDrawable extends Drawable implements Animatable {
-    public static final int DURATION_MILLIS = 500;
+public class GradualHorizontalProgressDrawable extends Drawable implements Animatable {
+    public static final int DURATION_MILLIS = 666;
     Line mLine;
     Context mContext;
     private Animation mAnimation;
     private View mParent;
 
-    public EnlargeHorizontalProgressDrawable(Context context, View parent) {
+    public GradualHorizontalProgressDrawable(Context context, View parent) {
         mContext = context;
         mParent = parent;
         intrinsicHeight = mContext.getResources().getDimensionPixelSize(R.dimen.HorizontalProgressDrawable_height_default);
@@ -57,14 +59,14 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                mLine.nextColor();
+                mLine.next();
             }
         });
         mAnimation = animation;
     }
 
     public void setColors(int... colors) {
-        mLine.colors = colors;
+        mLine.setColors(colors);
         invalidateSelf();
     }
 
@@ -144,41 +146,39 @@ public class EnlargeHorizontalProgressDrawable extends Drawable implements Anima
         int current = 0;
         float progress;
         int[] colors;
+        float[] positions;
         final Paint mPaint = new Paint();
 
         Line(Resources res) {
             colors = new int[]{res.getColor(R.color.holo_blue_bright), res.getColor(R.color.holo_green_light), res.getColor(R.color.holo_orange_light), res.getColor(R.color.holo_red_light)};
+            positions = new float[colors.length];
+            for (int i = 0; i < colors.length; i++) {
+                positions[i] = (float) i / (positions.length - 1);
+            }
             this.mPaint.setStrokeCap(Paint.Cap.SQUARE);
             this.mPaint.setAntiAlias(true);
             this.mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStyle(Paint.Style.FILL);
         }
 
-        int getBackgroundColor() {
-            return colors[(current) % colors.length];
-        }
-
-        int getAnimationColor() {
-            return colors[(current + 1) % colors.length];
-        }
-
-        void nextColor() {
-            current = (current + 1) % colors.length;
+        void next() {
+            current = (current + 1) % 2;
         }
 
         void draw(Canvas c, Rect bounds) {
-            float radius = Math.min(bounds.width(), bounds.height()) / 2;
-            mPaint.setColor(getBackgroundColor());
-
-            //绘画背景线
-            c.drawRoundRect(new RectF(bounds.left, bounds.top, bounds.right, bounds.bottom), radius, radius, mPaint);
-            //绘制上层线
-            mPaint.setColor(getAnimationColor());
-            float width = bounds.width() * progress;
-            float mid = (bounds.left + bounds.right) / 2;
-            c.drawRoundRect(new RectF(mid - width / 2, bounds.top, mid + width / 2, bounds.bottom), radius, radius, mPaint);
+            float left = bounds.left + bounds.width() * (current + progress);
+            LinearGradient linearGradient = new LinearGradient(left, bounds.top, left + bounds.width(), bounds.bottom, colors, positions, Shader.TileMode.MIRROR);
+            mPaint.setShader(linearGradient);
+            c.drawRect(bounds, mPaint);
         }
 
+        public void setColors(int[] colors) {
+            this.colors = colors;
+            positions = new float[colors.length];
+            for (int i = 0; i < colors.length; i++) {
+                positions[i] = (float) i / (positions.length - 1);
+            }
+        }
 
         public void setProgress(float interpolatedTime) {
             progress = interpolatedTime;
