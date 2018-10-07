@@ -139,7 +139,6 @@ public class FlowHorizontalProgressDrawable extends Drawable implements Animatab
         void draw(Canvas c, Rect bounds) {
             mPaint.setStyle(Paint.Style.FILL);
             float perWidth = c.getWidth() / colors.length;
-            float radius = Math.min(perWidth, bounds.height()) / 2;
             for (int i = 0; i < colors.length; i++) {
                 mPaint.setColor(colors[i]);
                 float left = progress * bounds.width() + bounds.left + i * perWidth;
@@ -148,13 +147,13 @@ public class FlowHorizontalProgressDrawable extends Drawable implements Animatab
                     /**
                      * 这条线被分为两半
                      */
-                    c.drawRoundRect(new RectF(left, bounds.top, bounds.right, bounds.bottom), radius, radius, mPaint);
+                    c.drawRect(new RectF(left, bounds.top, bounds.right, bounds.bottom), mPaint);
                     right = right % bounds.width();
-                    c.drawRoundRect(new RectF(bounds.left, bounds.top, right, bounds.bottom), radius, radius, mPaint);
+                    c.drawRect(new RectF(bounds.left, bounds.top, right, bounds.bottom), mPaint);
                 } else {
                     left = left % bounds.width();
                     right = right % bounds.width();
-                    c.drawRoundRect(new RectF(left, bounds.top, right, bounds.bottom), radius, radius, mPaint);
+                    c.drawRect(new RectF(left, bounds.top, right, bounds.bottom), mPaint);
                 }
             }
         }

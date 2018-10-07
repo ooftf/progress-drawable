@@ -145,7 +145,6 @@ public class ShuntHorizontalProgressDrawable extends Drawable implements Animata
 
             float perWidth = bounds.width() / 2f / (colors.length - 1f);
             float totalOffset = perWidth * colors.length;
-            float radius = Math.min(perWidth, bounds.height()) / 2;
             float mid = (bounds.left + bounds.right) / 2f;
             for (int i = 0; i < colors.length; i++) {
                 mPaint.setColor(colors[i]);
@@ -157,8 +156,8 @@ public class ShuntHorizontalProgressDrawable extends Drawable implements Animata
                 float rightStart = rightEnd - perWidth;
                 leftStart = Math.min(leftStart, mid);
                 rightStart = Math.max(rightStart, mid);
-                c.drawRoundRect(new RectF(leftEnd, bounds.top, leftStart, bounds.bottom), radius, radius, mPaint);
-                c.drawRoundRect(new RectF(rightStart, bounds.top, rightEnd, bounds.bottom), radius, radius, mPaint);
+                c.drawRect(new RectF(leftEnd, bounds.top, leftStart, bounds.bottom),  mPaint);
+                c.drawRect(new RectF(rightStart, bounds.top, rightEnd, bounds.bottom), mPaint);
             }
         }
 
